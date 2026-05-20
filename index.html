@@ -1521,9 +1521,19 @@
 
   .featured-card summary::after,
   .project-card summary::after {
-    border-color: rgba(13,121,184,0.28);
-    color: var(--navy-btn);
-    background: #ffffff;
+    display: none;
+  }
+
+  .featured-card summary {
+    grid-template-columns: 96px 1fr;
+  }
+
+  .project-card summary {
+    grid-template-columns: 120px 1fr;
+  }
+
+  .project-status {
+    display: none;
   }
 
   .category-projects {
@@ -1810,23 +1820,57 @@
 
   @media (max-width: 620px) {
     nav {
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(0, 1fr) auto;
       grid-template-areas:
         "title social"
         "links links";
-      min-height: 108px;
+      min-height: 0;
       padding: 10px 18px;
+      row-gap: 10px;
     }
 
     .nav-left {
+      width: 100%;
       justify-self: start;
-      justify-content: flex-start;
-      gap: 10px 14px;
+      justify-content: space-between;
+      gap: 8px 6px;
+    }
+
+    .nav-left a {
+      flex: 1 1 calc(33.333% - 6px);
+      min-width: 70px;
+      padding: 6px 0;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.6px;
+      line-height: 1.12;
     }
 
     .nav-title {
-      font-size: 16px;
-      letter-spacing: 2px;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 13px;
+      letter-spacing: 1px;
+      gap: 8px;
+    }
+
+    .nav-title::before {
+      flex: 0 0 auto;
+      font-size: 18px;
+      padding: 1px 6px 3px;
+    }
+
+    .nav-right {
+      flex: 0 0 auto;
+      gap: 12px;
+    }
+
+    .nav-right a {
+      width: 28px;
+      height: 28px;
+      align-items: center;
+      justify-content: center;
     }
 
     .hero-desc {
@@ -1838,7 +1882,7 @@
     }
 
     .hero {
-      margin-top: 108px;
+      margin-top: 136px;
       min-height: auto;
     }
   }
@@ -2552,7 +2596,6 @@
     const title = card.querySelector('.project-title, .featured-title')?.textContent.trim() || 'Project';
     const description = card.querySelector('.project-desc, summary p')?.textContent.trim() || '';
     const category = card.closest('.category-block')?.querySelector('.cat-title')?.textContent.trim() || 'Featured Engineering Work';
-    const status = card.querySelector('.project-status')?.textContent.trim();
     const tags = Array.from(card.querySelectorAll('.project-tags .tag')).map((tag) => tag.textContent.trim());
     const detailPanel = card.querySelector('.project-details, .featured-details');
 
@@ -2562,7 +2605,6 @@
     modalBody.innerHTML = detailPanel ? detailPanel.outerHTML : '';
 
     addModalChip(category);
-    addModalChip(status);
     tags.forEach(addModalChip);
 
     card.removeAttribute('open');
